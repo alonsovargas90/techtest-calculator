@@ -10,8 +10,15 @@ export class OperationsController {
   getAll(): Promise<Operation[]> {
     return this.operationService.findAll();
   }
+
+  @Get('/:id')
+  async getById(@Param() params: { id: number }): Promise<Operation> {
+    console.log('asking for Operation...', params.id);
+    return await this.operationService.findOne(params.id);
+  }
+
   @Post()
-  async createUser(@Body() body: Operation): Promise<Operation> {
+  async createOperation(@Body() body: Operation): Promise<Operation> {
     console.log('creating Operation...', body);
     return await this.operationService.create(body);
   }

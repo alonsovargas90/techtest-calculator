@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OperationsModule } from './operations/operations.module';
 import { User } from './types/user.entity';
 import { Operation } from './types/operation.entity';
+import { RecordsModule } from './records/records.module';
+import { Record } from './types/record.entity';
 
 @Module({
   imports: [
@@ -14,12 +16,13 @@ import { Operation } from './types/operation.entity';
       username: 'myuser',
       password: 'mypassword',
       database: 'calculator',
-      entities: [User, Operation],
+      entities: [User, Operation, Record],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, Operation]),
+    TypeOrmModule.forFeature([User, Operation, Record]),
     UsersModule,
     OperationsModule,
+    RecordsModule,
   ],
   controllers: [],
   providers: [],

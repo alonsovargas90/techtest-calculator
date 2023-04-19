@@ -14,6 +14,10 @@ export class OperationsService {
     return this.operationRepository.find();
   }
 
+  findOne(id: number): Promise<Operation> {
+    return this.operationRepository.findOneByOrFail({ id });
+  }
+
   async create(user: Operation): Promise<Operation> {
     return await this.operationRepository.save(user);
   }
