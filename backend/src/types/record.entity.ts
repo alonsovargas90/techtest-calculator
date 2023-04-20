@@ -2,7 +2,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { Operation } from './operation.entity';
@@ -13,11 +13,12 @@ export class Record {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => Operation)
+  @ManyToOne(() => Operation)
+  @ManyToOne(() => Operation, (operation) => operation.id)
   @JoinColumn()
   operation: Operation;
 
-  @ManyToMany(() => User)
+  @ManyToOne(() => User, (user) => user.id)
   @JoinColumn()
   user: User;
 

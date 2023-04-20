@@ -7,11 +7,13 @@ import {
   Inject,
   Param,
   Post,
+  Delete,
 } from '@nestjs/common';
 import { Record } from '../types/record.entity';
 import { RecordsService } from './records.service';
 import { OperationsService } from '../operations/operations.service';
 import { UsersService } from '../users/users.service';
+import { DeleteResult } from 'typeorm';
 
 @Controller('records')
 export class RecordsController {
@@ -26,6 +28,11 @@ export class RecordsController {
   @Get()
   getPage(@Param() params: { page: number; limit: number }): Promise<Record[]> {
     return this.recordService.getPage(params.page, params.limit);
+  }
+
+  @Delete('/:id')
+  deleteRecord(@Param() params: { id: number }): Promise<DeleteResult> {
+    return this.recordService.delete(params.id);
   }
 
   @Post()
@@ -54,8 +61,10 @@ export class RecordsController {
     const newRecordDTO = {
       ...body,
       user_balance: newUserBalance,
-      user: user.id,
-      operation: operation.id,
+      // user,
+      // operation,
+      user: body.user_id,
+      operation: body.operation_id,
     };
     console.log('newRecordDTO', newRecordDTO);
     return await this.recordService.create(newRecordDTO);
