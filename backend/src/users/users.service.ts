@@ -35,11 +35,15 @@ export class UsersService {
   }
 
   async validateLogin(logInName: string, logInpass: string): Promise<boolean> {
-    const foundUser: User = await this.findOneByName(logInName);
-    return (
-      foundUser &&
-      foundUser.name === logInName &&
-      foundUser.password === logInpass
-    );
+    try {
+      const foundUser: User = await this.findOneByName(logInName);
+      return (
+        foundUser &&
+        foundUser.name === logInName &&
+        foundUser.password === logInpass
+      );
+    } catch (e) {
+      return false;
+    }
   }
 }

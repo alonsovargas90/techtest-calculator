@@ -5,9 +5,9 @@ import {
   HttpException,
   HttpStatus,
   Inject,
+  Param,
   Post,
 } from '@nestjs/common';
-import { v4 as UniqueID } from 'UUID';
 import { Record } from '../types/record.entity';
 import { RecordsService } from './records.service';
 import { OperationsService } from '../operations/operations.service';
@@ -17,15 +17,15 @@ import { UsersService } from '../users/users.service';
 export class RecordsController {
   constructor(
     private readonly recordService: RecordsService,
-    // @Inject(OperationsService)
-    // private readonly operationsService: OperationsService,
-    // @Inject(UsersService)
-    // private readonly userService: UsersService,
+    @Inject(OperationsService)
+    private readonly operationsService: OperationsService,
+    @Inject(UsersService)
+    private readonly userService: UsersService,
   ) {}
 
   @Get()
-  getPage(): Promise<Record[]> {
-    return this.recordService.getPage();
+  getPage(@Param() params: { page: number; limit: number }): Promise<Record[]> {
+    return this.recordService.getPage(params.page, params.limit);
   }
 
   @Post()
@@ -35,19 +35,29 @@ export class RecordsController {
     }
 
     //Get The Objs
-    // const user = await this.userService.findOne(body.user_id);
-    // const operation = await this.operationsService.findOne(body.operation_id);
-    // if (!operation || !user) {
-    //   const err = !operation ? 'Missmatch Operation Id' : 'Missmatch User Id';
-    //   throw new HttpException(err, HttpStatus.BAD_REQUEST);
-    // }
+    const user = await this.userService.findOne(body.user_id);
+    const operation = await this.operationsService.findOne(body.operation_id);
+    const newUserBalance = body.user_balance - operation.cost;
 
-    const newRecord = {
+    if (!operation || !user) {
+      const err = !operation ? 'Missmatch Operation Id' : 'Missmatch User Id';
+      throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    }
+
+    if (newUserBalance <= 0) {
+      throw new HttpException(
+        'Error Not enough balance to process the request',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    console.log('body', body);
+    const newRecordDTO = {
       ...body,
-      id: UniqueID(),
-    //   user,
-    //   operation,
+      user_balance: newUserBalance,
+      user: user.id,
+      operation: operation.id,
     };
-    return await this.recordService.create(newRecord);
+    console.log('newRecordDTO', newRecordDTO);
+    return await this.recordService.create(newRecordDTO);
   }
 }

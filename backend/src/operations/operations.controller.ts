@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Operation } from '../types/operation.entity';
 import { OperationsService } from './operations.service';
 
@@ -23,6 +31,6 @@ export class OperationsController {
   @Post()
   async createOperation(@Body() body: Operation): Promise<Operation> {
     console.log('creating Operation...', body);
-    return await this.operationService.create(body);
+    return await this.operationService.create({ ...body });
   }
 }

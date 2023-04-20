@@ -21,7 +21,7 @@ export class RecordsService {
       .getMany();
   }
 
-  async create(user: Record): Promise<Record> {
-    return await this.recordRepository.save(user);
+  async create(record: Record): Promise<Record> {
+    return await this.recordRepository.save(record);
   }
 }
