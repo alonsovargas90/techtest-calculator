@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { Operation } from '../types/operation.entity';
 import { OperationsService } from './operations.service';
 
@@ -13,6 +13,9 @@ export class OperationsController {
 
   @Get('/:id')
   async getById(@Param() params: { id: number }): Promise<Operation> {
+    if (!params.id) {
+      throw new HttpException('Missing Id', HttpStatus.BAD_REQUEST);
+    }
     console.log('asking for Operation...', params.id);
     return await this.operationService.findOne(params.id);
   }

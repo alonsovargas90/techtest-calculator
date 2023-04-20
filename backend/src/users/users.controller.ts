@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { User } from '../types/user.entity';
 import { UsersService } from './users.service';
 
@@ -18,7 +18,9 @@ export class UsersController {
 
   @Get('/:id')
   async getById(@Param() params: { id: number }): Promise<User> {
-    console.log('asking for User...', params.id);
+    if (!params.id) {
+      throw new HttpException('Missing Id', HttpStatus.BAD_REQUEST);
+    }
     return await this.usersService.findOne(params.id);
   }
 

@@ -4,19 +4,23 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
   Post,
 } from '@nestjs/common';
+import { v4 as UniqueID } from 'UUID';
 import { Record } from '../types/record.entity';
 import { RecordsService } from './records.service';
-import { OperationsService } from 'src/operations/operations.service';
-import { UsersService } from 'src/users/users.service';
+import { OperationsService } from '../operations/operations.service';
+import { UsersService } from '../users/users.service';
 
 @Controller('records')
 export class RecordsController {
   constructor(
     private readonly recordService: RecordsService,
-    private readonly operationService: OperationsService,
-    private readonly userService: UsersService,
+    // @Inject(OperationsService)
+    // private readonly operationsService: OperationsService,
+    // @Inject(UsersService)
+    // private readonly userService: UsersService,
   ) {}
 
   @Get()
@@ -26,17 +30,23 @@ export class RecordsController {
 
   @Post()
   async createRecord(@Body() body: any): Promise<Record> {
-    const user = await this.userService.findOne(body.user_id);
-    const operation = await this.userService.findOne(body.operation_id);
-
-    // TODO add once throw for each
-    if (!user || !operation) {
-      throw new HttpException('Ids mismatch', HttpStatus.BAD_REQUEST);
+    if (!body.user_id || !body.operation_id) {
+      throw new HttpException('Missing Params', HttpStatus.BAD_REQUEST);
     }
+
+    //Get The Objs
+    // const user = await this.userService.findOne(body.user_id);
+    // const operation = await this.operationsService.findOne(body.operation_id);
+    // if (!operation || !user) {
+    //   const err = !operation ? 'Missmatch Operation Id' : 'Missmatch User Id';
+    //   throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    // }
+
     const newRecord = {
       ...body,
-      user,
-      operation,
+      id: UniqueID(),
+    //   user,
+    //   operation,
     };
     return await this.recordService.create(newRecord);
   }
