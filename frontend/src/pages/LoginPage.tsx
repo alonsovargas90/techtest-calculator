@@ -1,16 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { MyContext } from '../context';
+import { UserContext } from '../providers/UserContext';
 import { Form, Button } from 'react-bootstrap';
 import api from '../API';
-import { User } from '../types/User';
 
 const LoginPage: React.FC = () => {
-  const { setUserLogIn } = useContext(MyContext);
-  const [email, setEmail] = useState('');
+  const { setUserProfile } = useContext(UserContext);
+  const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+    setUserName(event.target.value);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,11 +19,15 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
-      const response = await api.post('/users/login', { data: { name: email, password } });
-      const user: User = response.data;
-      console.log('response.data', response.data);
-      if (setUserLogIn) {
-        setUserLogIn(user);
+      const response = await api.post('/auth/login', { data: { username, password } });
+      const jwt = response.data.access_token;
+      document.cookie = `jwt=${jwt}; path=/; secure; SameSite=strict`;
+
+      const responseProfile = await api.get('/auth/profile');
+      const userProfile = responseProfile.data.username || '';
+
+      if (setUserProfile) {
+        setUserProfile(userProfile);
       }
     } catch (error) {
       console.error(error);
@@ -40,7 +43,7 @@ const LoginPage: React.FC = () => {
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" value={email} onChange={handleUsernameChange} />
+              <Form.Control type="email" placeholder="Enter email" value={username} onChange={handleUsernameChange} />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">

@@ -7,6 +7,87 @@
 	},
 	"item": [
 		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Get Profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/auth/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"jwt_token\", response.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"alonso@mail.com\",\r\n    \"password\": \"pass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Users",
 			"item": [
 				{
@@ -75,7 +156,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"someoneelse@mail.com\",\r\n    \"password\": \"pass\",\r\n    \"status\": \"Active\"\r\n}",
+							"raw": "{\r\n    \"username\": \"second@mail.com\",\r\n    \"password\": \"pass\",\r\n    \"status\": \"Inactive\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -97,21 +178,12 @@
 					"response": []
 				},
 				{
-					"name": "Validate User",
+					"name": "Delete User",
 					"request": {
-						"method": "POST",
+						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"alonso\",\r\n    \"password\": \"pass\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:3000/users/validate",
+							"raw": "http://localhost:3000/users/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -119,7 +191,7 @@
 							"port": "3000",
 							"path": [
 								"users",
-								"validate"
+								"3"
 							]
 						}
 					},
@@ -225,7 +297,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"operation_id\": 1,\r\n    \"user_id\": 1,\r\n    \"amount\": 100,\r\n    \"user_balance\": 1000,\r\n    \"operation_response\": \"sucess\",\r\n    \"date\": \"10-03-2023\"\r\n}",
+							"raw": "{\r\n    \"operation_id\": 1,\r\n    \"user_id\": 1,\r\n    \"amount\": 100,\r\n    \"user_balance\": 880,\r\n    \"operation_response\": \"\",\r\n    \"date\": \"10-03-2023\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -249,12 +321,54 @@
 				{
 					"name": "Delete Record",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/records/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"records",
+								"9"
+							]
+						}
 					},
 					"response": []
 				}
 			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

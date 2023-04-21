@@ -6,6 +6,7 @@ import { User } from './types/user.entity';
 import { Operation } from './types/operation.entity';
 import { RecordsModule } from './records/records.module';
 import { Record } from './types/record.entity';
+import { AuthModule } from './auth/auth.module';
 import * as cors from 'cors';
 @Module({
   imports: [
@@ -21,8 +22,10 @@ import * as cors from 'cors';
     }),
     TypeOrmModule.forFeature([User, Operation, Record]),
     UsersModule,
+    AuthModule,
     OperationsModule,
     RecordsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
