@@ -1,0 +1,20 @@
+// Import Bootstrap Sass
+@import "~bootstrap/scss/bootstrap";
+@import "./components/NavBar";
+
+// Add your own custom styles below
+body {
+  background-color: #f7f7f7;
+}
+
+.btn-primary {
+  color: white;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  color: white;
+  background-color: #0069d9;
+  border-color: #0062cc;
+}

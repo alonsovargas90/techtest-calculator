@@ -30,9 +30,9 @@ export class UsersController {
     return await this.usersService.create(body);
   }
 
-  @Post('validate')
+  @Post('login')
   async validateUser(@Body() body: any): Promise<boolean> {
-    console.log('validating User...', body);
+    console.log('LogIn User...', body);
     return await this.usersService.validateLogin(body.name, body.password);
   }
 }

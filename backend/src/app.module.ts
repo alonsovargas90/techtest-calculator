@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OperationsModule } from './operations/operations.module';
@@ -6,7 +6,7 @@ import { User } from './types/user.entity';
 import { Operation } from './types/operation.entity';
 import { RecordsModule } from './records/records.module';
 import { Record } from './types/record.entity';
-
+import * as cors from 'cors';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -27,4 +27,8 @@ import { Record } from './types/record.entity';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(cors()).forRoutes('*');
+  }
+}
