@@ -1,9 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../providers/UserContext';
 import { Form, Button } from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
 import api from '../API';
 
 const LoginPage: React.FC = () => {
+  const history = useHistory();
   const { setUserProfile } = useContext(UserContext);
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -24,10 +26,11 @@ const LoginPage: React.FC = () => {
       document.cookie = `jwt=${jwt}; path=/; secure; SameSite=strict`;
 
       const responseProfile = await api.get('/auth/profile');
-      const userProfile = responseProfile.data.username || '';
+      const userProfile = responseProfile.data;
 
       if (setUserProfile) {
         setUserProfile(userProfile);
+        history.push("/operations");
       }
     } catch (error) {
       console.error(error);

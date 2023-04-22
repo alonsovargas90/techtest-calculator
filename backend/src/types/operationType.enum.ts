@@ -1,8 +1,8 @@
 export enum OperationType {
-  ADDITION = 'ADDITION',
-  SUBTRACTION = 'SUBTRACTION',
-  MULTIPLICATION = 'MULTIPLICATION',
-  DIVISION = 'DIVISION',
-  SQUARE_ROOT = 'SQUARE_ROOT',
-  RANDOM_STRING = 'RANDOM_STRING',
+  ADDITION = 'Addition',
+  SUBTRACTION = 'Substraction',
+  MULTIPLICATION = 'Multiplication',
+  DIVISION = 'Division',
+  SQUARE_ROOT = 'Square_root',
+  RANDOM_STRING = 'Random_String',
 }

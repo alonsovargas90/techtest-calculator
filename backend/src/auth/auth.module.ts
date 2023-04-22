@@ -13,7 +13,7 @@ import { jwtConstants } from '../constants';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' }, //TODO return this to 60s for dev increase to stop relogging on postman
+      signOptions: { expiresIn: '3600s' }, //TODO return this to 60s for dev increase to stop relogging on postman
     }),
   ],
   providers: [

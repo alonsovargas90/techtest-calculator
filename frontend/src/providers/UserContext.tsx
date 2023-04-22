@@ -1,12 +1,13 @@
 import React, { createContext, useState } from 'react';
+import { UserProfile } from '../types/UserProfile';
 
 interface UserContextType {
-  userProfile: string;
-  setUserProfile: (userName: string) => void;
+  userProfile: UserProfile;
+  setUserProfile: (userName: UserProfile) => void;
 }
 
 const defaultUserContext: UserContextType = {
-  userProfile: '',
+  userProfile: {} as UserProfile,
   setUserProfile: () => {},
 };
 
@@ -18,7 +19,7 @@ interface UserProviderProps {
 export const UserContext = createContext<UserContextType>(defaultUserContext);
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [userProfile, setUserProfile] = useState<string>('');
+  const [userProfile, setUserProfile] = useState<UserProfile>({} as UserProfile);
 
   const userContext: UserContextType = {
     userProfile,

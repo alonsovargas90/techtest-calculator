@@ -23,14 +23,17 @@ export class Record {
   user: User;
 
   @Column()
-  amount: number;
+  number_1: number;
+
+  @Column()
+  number_2: number;
 
   @Column()
   user_balance: number;
 
   @Column()
-  operation_response: string;
+  operation_response?: string;
 
   @Column()
-  date: Date;
+  date?: Date;
 }
