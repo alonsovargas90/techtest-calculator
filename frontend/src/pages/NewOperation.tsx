@@ -6,12 +6,14 @@ import api from "../API";
 import { Operation } from "../types/Operation";
 import { UserContext } from "../providers/UserContext";
 import { UserProfile } from "../types/UserProfile";
-import { Record } from "../types/Records";
+import { RecordsDto } from "../types/RecordsDto";
+import { LoaderContext } from "../providers/LoaderContext";
 
 const NewOperation: React.FC = () => {
   const [num1, setNum1] = useState<number>(0);
   const [num2, setNum2] = useState<number>(0);
   const { userProfile, setUserProfile } = useContext(UserContext);
+  const { isLoading, setIsLoading } = useContext(LoaderContext);
   const [operations, setOperations] = useState<Operation[]>([]);
   const [initialBalance, setInitialBalance] = useState<number>(1000);
   const [operation, setOperation] = useState<OperationType>();
@@ -74,19 +76,17 @@ const NewOperation: React.FC = () => {
     console.log("USER", userProfile);
     console.log("operations", operations);
     console.log("OperationId", OperationId);
-    const recordDto: Record = {
+    const recordDto: RecordsDto = {
       operation_id: OperationId,
       user_id: UserId,
       number_1: num1,
       number_2: num2,
-      operation_response: '',
-      user_balance: 880, //TODO UPDATE
       date: new Date().toISOString(),
     };
-    console.log("NewRecord", recordDto);
 
+    setIsLoading(true);
     await api.post('/records', { data: recordDto }).then((res) => {
-      console.log('res', res);
+      setIsLoading(false);
     });
     //const response = await api.post('/auth/login', { data: { username, password } });
     // let res: number;
